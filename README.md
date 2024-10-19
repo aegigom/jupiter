@@ -22,6 +22,24 @@
    차종에 따라 모듈의 구성, 주소, 패킷 규칙이 달라져 동작하지 않을 수 있습니다.<br>
    또한 차량 업데이트를 통해 주소, 패킷주소가 달라져 잘 동작하던 기능이 추후 사용할 수 없게 될 수 있습니다.<br>
 <br>
+    기능 문의 / 건의 및 인클로져 제작 문의 등은 <a href="https://cafe.naver.com/canhacker">https://cafe.naver.com/canhacker</a>를 방문해 주세요.<br>
+<br>
+커피 한잔 사주고 싶으신 분은 <a href="https://cafe.naver.com/canhacker">https://toss.me/canhackers</a><br>
+<br>
+<br><br><br>
+
+★ 하드웨어 구성 준비물<br><br>
+
+1. 라즈베리파이 2W 또는 2WH : 만약 2W를 구입했다면 HAT을 연결하기 위한 헤더핀을 별도로 구입해 납땜 해야 합니다.<br>
+2. Waveshare RS485 CAN HAT<br>
+3. 12V → 5V Step Down 모듈 (MP1584EN 外)<br>
+4. Micro USB Male Vertical PCB (<a href="https://www.aliexpress.com/item/1005002320414960.html">https://www.aliexpress.com/item/1005002320414960.html</a>)<br>
+5. Micro SD 메모리 최소 8GB, 권장 32GB 이상<br>
+6. DIY용 OBD 커넥터 (<a href="https://www.aliexpress.com/item/1468276483.html">https://www.aliexpress.com/item/1468276483.html</a>)<br>
+- 6번 핀 CAN High, 14번 핀 Can Low, 16번 핀 12V, 4번핀 GND<br>
+7. 전용 인클로져 (<a href="https://cafe.naver.com/canhacker/27">https://cafe.naver.com/canhacker/27</a>) 또는 직접 디자인 한 케이스<br>
+8. Tesla용 OBD 컨버터 케이블 (<a href="https://www.aliexpress.com/item/1005006022463035.html">https://www.aliexpress.com/item/1005006022463035.html</a>)<br>
+<br>
 
 ★ 설치 방법<br>
 1. <a href="https://www.raspberrypi.com/software/">https://www.raspberrypi.com/software/</a><br>
@@ -108,5 +126,44 @@ dtoverlay=mcp2515-can0,oscillator=12000000,interrupt=25,spimaxfrequency=2000000<
 14. <b>sudo reboot</b>으로 재부팅합니다.<br>
 </p>
 <br><br><br>
+<p>
+★ NAVDY HUD 지원은 별도의 개조된 전용 펌웨어가 필요합니다.<br>
+단종으로 인해 구하기 힘든 물건이니 참고하시고, 기존 보유자 중 전용 펌웨어를 사용 중이지 않는 분은 카페 채팅으로 별도 문의 바랍니다.<br>
+사용을 위해서는 Clone 후 Jupiter 기기의 /home 경로에 mac_address 파일을 만들어 00:00:00:00:00:00 형태로 본인 기기의 Mac Address를 넣어야 합니다.<br>
+또한 jupiter_settings에 Navdy 사용을 활성화 시켜야 합니다. 이 설정 파일은 주피터 최초 구동 후 생성되니 위 단계를 마치고 재부팅 후 수정하세요<br>
+<br>
+기본 설치법 외에 추가로 블루투스 페어링 절차가 필요합니다.<br>
+<br><br>
+<b>sudo bluetoothctl</b><br>
+<br>
+<b>scan on</b>  (접속 가능한 블루투스 장치 목록이 뜹니다. Navdy를 찾으면 MAC Address도 알 수 있습니다.)<br>
+<br>
+<b>pair 54:ED:A3:xx:xx:xx</b>  (본인 Navdy의 MAC Address를 찾아서)<br>
+<br>
+confirm passkey 질문에서 yes 입력, Navdy에서도 Confirm을 눌러줘야 합니다.<br>
+<br>
+<b>trust 54:ED:A3:xx:xx:xx</b>  (본인 Navdy의 MAC Address를 찾아서)<br>
+<br>
+<b>exit</b> (bluetoothctl 빠져 나오기)<br>
+<br>
+<br>
+<b>sudo apt-get install python3-dev</b><br>
+<br>
+<b>sudo apt-get install libbluetooth-dev</b><br>
+<br>
+<b>source ./bin/activate</b><br>
+<br>
+<b>pip3 install git+https://github.com/pybluez/pybluez.git#egg=PyBluez</b><br>
+<br>
+<b>sudo nano /home/jupiter_settings.json</b><br>
+<br>
+'NavdyHud' : 0    →  1로 수정 후  (Ctrl-X, Y로 저장)<br>
+<br>
+<b>sudo nano /home/mac_address</b><br>
+<br>
+Navdy MAC Address 입력 <b>54:ED:A3:xx:xx:xx</b> (Ctrl-X, Y로 저장)<br>
+<br>
+<b>sudo reboot</b><br>
+</p>
 </body>
 </html>
