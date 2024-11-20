@@ -235,10 +235,5 @@ def main():
     J = Jupiter(DASH, settings)
     J.start()
 
-    if settings.get('NavdyHud') == 1:
-        from navdy import Hud
-        H = Hud(DASH)
-        H.start()
-
 if __name__ == '__main__':
     main()
